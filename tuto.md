@@ -74,7 +74,7 @@ python3 --version
 You can verify if you have multiple versions of Python installed on your computer (basically, Python3.8 is often installed by default). To do this, you can display all files in `/usr/bin` whose name begin with "python":
 
 ```bash
-ls /usr/bin/python3 *
+ls /usr/bin/python3*
 ```
 
 For example in my machine you can see that I have already installed `python3.8`, `python3.9` and `python3.10`:
