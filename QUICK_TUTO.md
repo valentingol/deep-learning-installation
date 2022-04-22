@@ -8,7 +8,7 @@ Installed versions:
 
 * Python 3.9
 * Virtualenv & VirtualenvWrapper
-* CUDA 11.2 and CuDNN 8.1
+* CUDA 11.2 and CuDNN 8.1 (versions compatible with tensorflow [here](https://www.tensorflow.org/install/source?hl=en#gpu))
 * VSCode
 * miniconda (optional)
 
@@ -95,11 +95,32 @@ Check current versions:
 ls /usr/local/cuda*
 ```
 
+* For Ubuntu 18.4 or 20.04:
+
 Find version in the CUDA archives : <https://developer.nvidia.com/cuda-toolkit-archive>. Then click on the button that corresponds to you set-up. And choose **deb (local)** option.
 
 Then follow the instruction to download CUDA (run the command in a folder dedicated to installation to don't loose them).
 
-Mark the folder as manually installed:
+* For Ubuntu 22.04:
+
+```script
+sudo apt-get install gcc-9 g++-9
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 10
+update-alternatives --config gcc
+wget https://developer.nvidia.com/compute/cuda/11.2.2/local_installers/cuda_11.2.2_460.32.03_linux-run
+sudo sh cuda_11.2.2_460.32.03_linux-run
+```
+
+Uncheck the driver installation before installing the toolkit.
+
+Come back to gcc 11:
+
+``` script
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 1
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 2
+```
+
+* Finally, mark the folder as manually installed:
 
 ```script
 sudo apt-mark manual cuda-\*
