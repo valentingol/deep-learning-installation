@@ -1,4 +1,4 @@
-# Full Python set-up installation for Ubuntu
+# Full Python set-up installation for Ubuntu LTS (18.04, 20.04, 22.04)
 
 Author : Valentin Goldité ([GitHub:valentingol](https://github.com/))
 
@@ -12,13 +12,13 @@ This tutorial provide a step-by-step pipeline to install an effective Python set
 
 ![alt text](./docs/logos.png)
 
-You need a working **Ubuntu LTS** to run this tutorial (the tutorial was tested for 20.04 LTS). Then to have an access to computation on GPU using CUDA, you need a **NVIDIA GPU, a GTX 780 or newer** (more precisely, you need to have a compute capability of 3.5 or more, see the compute capability of your GPU [here](https://developer.nvidia.com/cuda-gpus#collapse4)). In case of you don't have a valid GPU, you must use your CPU instead and you can skip the CUDA and cuDNN installation steps.
+You need a working **Ubuntu LTS** (22.04, 20.04 or 18.04) to run this tutorial. Then to have an access to computation on GPU using CUDA, you need a **NVIDIA GPU, a GTX 780 or newer** (more precisely, you need to have a compute capability of 3.5 or more, see the compute capability of your GPU [here](https://developer.nvidia.com/cuda-gpus#collapse4)). In case of you don't have a valid GPU, you must use your CPU instead and you can skip the CUDA and cuDNN installation steps.
 
 ## Devices and versions
 
 The installations and corresponding versions proposed here are:
 
-* Python 3.9
+* Python 3.10
 * Virtualenv & VirtualenvWrapper
 * CUDA 11.2 and CuDNN 8.1
 * VSCode
@@ -26,9 +26,7 @@ The installations and corresponding versions proposed here are:
 
 NOTE: **you can easily install other versions replacing the versions mentioned in this tutorial but these version was tested in 2022, they work well together and run the current last versions of deep learning framework**.
 
-Python 3.10 or newer is not handled by deep learning framework yet.
-
-To choose good versions of CUDA and cuDNN from a Tensorflow version, you can check this page: <https://www.tensorflow.org/install/source#gpu>. The last version is compatible with CUDA 11.2 and CuDNN 8.1 so we are going to install these versions. Note that most of CUDA versions are compatible with last Pytorch versions and it is also possible to install cuda toolkit in virtual environment to ensure compatibility (cuDNN is not necessary for Pytorch). Finally, Jax is compatible with CUDA 11.1 or newer and cuDNN 8.0.2 or newer, some combination require building from source (complete tutorial [here](https://github.com/google/jax#installation)) but not the versions used in this tutorial.
+To choose good versions of CUDA and cuDNN from a Tensorflow version, you can check this page: <https://www.tensorflow.org/install/source?hl=en#gpu>. The last version is compatible with CUDA 11.2 and CuDNN 8.1 so we are going to install these versions. Note that most of CUDA versions are compatible with last Pytorch versions (and cuDNN is not necessary for Pytorch). Finally, Jax is compatible with CUDA 11.1 or newer and cuDNN 8.0.2 or newer, some combination require building from source (complete tutorial [here](https://github.com/google/jax#installation)) but not the versions used in this tutorial.
 
 ## Before to start
 
@@ -44,17 +42,7 @@ If you have parenthesis with a name on it, it means that you are in a virtual en
 
 ## Install Python
 
-[**Python**](https://www.python.org/) is by far the most popular language for machine learning both in the research and professional world. The reason is that Pyhton is an intuitive and permissive language with a ton of optimized ML and processing libraries. You will to install the **3.9 version** in this tutorial but you can install all versions you want by the same way (in particular versions that are in alpha/beta stage).
-
-You can now check your current Python by default:
-
-(**note:** outside a virtual environment, `python` usually refers to a Python2 version while `python3` refers to the current Python3 version. Python 2 is deprecated so `python` is no longer installed by default in new machines. In all cases, always use `python3` when you are outside a virtual environment)
-
-```script
-python3 --version
-```
-
-The returned version is your default version of Python. It's not always Python 3.9 even if you install it. It's possible to change the default version to 3.9 but it's dangerous because some applications need a specific version to works and changing the default version could break them. In the next session you will see how set the Pyhton version during environment creation.
+[**Python**](https://www.python.org/) is by far the most popular language for machine learning both in the research and professional world. The reason is that Pyhton is an intuitive and permissive language with a ton of optimized ML and processing libraries. You will to install the **3.10 version** in this tutorial but you can install all versions you want by the same way (in particular versions that are in alpha/beta stage).
 
 Now you can verify if you have already Python3.9 installed on your computer. To do this, you can display all files in `/usr/bin` whose name begin with "python":
 
@@ -62,21 +50,23 @@ Now you can verify if you have already Python3.9 installed on your computer. To 
 ls /usr/bin/python3*
 ```
 
+(**note:** outside a virtual environment, `python` usually refers to a Python2 version while `python3` refers to the current Python3 version. Python 2 is deprecated so `python` is no longer installed by default in new machines. In all cases, always use `python3` when you are outside a virtual environment)
+
 For example in my machine you can see that my default Python is 3.8 and I have already installed `python3.8`, `python3.9` and `python3.10`:
 
 ![alt text](docs/installed_python_versions.png)
 
-If `python3.9` appears, you can skip the Python installation.
+If `python3.10` appears, you can skip the Python installation.
 
-If you have not Python3.9 in your computer: first add the Python PPA (Personal Package Archive) in apt to get the version you want and install Python 3.9:
+If you have not Python3.10 in your computer: first add the Python PPA (Personal Package Archive) in apt to get the version you want and install Python 3.10:
 
 ```script
 sudo add-apt-repository ppa:deadsnakes/ppa
 sudo apt update
-sudo apt install python3.9
+sudo apt install python3.10 python3.10-distutils python3.10-venv
 ```
 
-Now you can verify if Python3.9 is correcly installed:
+Now you can verify if Python3.10 is correcly installed:
 
 ```script
 ls /usr/bin/python3*
@@ -136,7 +126,7 @@ Some explanations :
 * VIRTUALENVWRAPPER_HOOK_DIR: path of the directory that contains your hooks
 * source ~/.local/bin/virtualenvwrapper.sh
 
-In nano editor, you can save and quit your changes with : **Ctrl+X Y ENTER**
+In nano editor, you can save and quit your changes with : **Ctrl+X**, **Y**, **ENTER**
 
 Now restart the bash by running: `bash`
 
@@ -148,23 +138,24 @@ Now your Virtualenv is ready to use in combination with VirtualenvWrapper. You c
 
 Some usefull command that you can already test right now:
 
-| Command               | Effect                                                   |
-| --------------------- | :------------------------------------------------------- |
-| workon                | display all created env                                  |
-| mkvirtualenv test_env | create an environment called "test_env" (and go into it) |
-| workon test_env       | go into "test_env"                                       |
-| deactivate            | leave the current environment                            |
-| rmvirtualenv test_env | remove "test" (you must leave "test_env" before)         |
-| mktmpenv              | create a temporary environment (removed when left)       |
+| Command               | Effect                                                           |
+| --------------------- | :--------------------------------------------------------------- |
+| workon                | display all created env                                          |
+| mkvirtualenv test_env | create an environment called "test_env" (and go into it)         |
+| workon test_env       | go into "test_env"                                               |
+| deactivate            | leave the current environment                                    |
+| rmvirtualenv test_env | remove "test" (you must leave "test_env" before)                 |
+| mktmpenv              | create a temporary environment (removed when left)               |
+| cpvirtualenv          | copy an environment to a new environment (convenient for rename) |
 
 To create an environment with a specific version of Python (and go directly inside it), you must precise it in argument `-p`:
 
 ```script
-mkvirtualenv -p python3.9 name_of_env
+mkvirtualenv -p python3.10 name_of_env
 deactivate
 ```
 
-If 3.9 is your default version of Python, you do not have to specify "-p python3.9".
+Note that if you have Ubuntu 22.04, the default python version is `python3.10` and so you do not have to specify "-p python3.10". Run command `python3 --version` to verify.
 
 ## CUDA and CuDNN
 
@@ -172,7 +163,13 @@ If 3.9 is your default version of Python, you do not have to specify "-p python3
 
 ### Check Driver version
 
-First of all, you need a good version of the drivers. Open **Software and Updates (Ubuntu application)**, go in tab "Additional drivers" and select the last version of CUDA (proprietary driver). Then reboot your computer. Note that you must deactivate the Secure Boot first to install proprietary drivers (you can do it in the BIOS menu that is generally accessible by pressing F12 when the computer is booting). Now the command `nvidia-smi` should return something. If it is not the case, verify that you have a correct NVIDIA GPU with Secure Boot disabled and that you are not in the Power Saving Mode (check Nvidia settings with the command `nvidia-settings`).
+First of all, you need a good version of the drivers. Open **Software and Updates (Ubuntu application)**, go in tab "Additional drivers" and select the last version of CUDA (proprietary driver). In the example below it is 510:
+
+![alt text](./docs/drivers.png)
+
+Then reboot your computer. Note that you must deactivate the Secure Boot first to install proprietary drivers (you can do it in the BIOS menu that is generally accessible by pressing F2 when the computer is booting).
+
+Now the command `nvidia-smi` should return something. If it is not the case, verify that you have a correct NVIDIA GPU with Secure Boot disabled and that you are not in the Power Saving Mode (check Nvidia settings with the command `nvidia-settings`).
 
 ### Pre-installation checks
 
@@ -186,7 +183,7 @@ First verify that your machine is adapted to install CUDA:
 lspci | grep -i nvidia
 ```
 
-* verify architecture. The following code should returns "x86_64"
+* verify your architecture. The following code should returns "x86_64", "ppc64le" or "arm64-sbsa":
 
 ```script
 uname -m
@@ -199,7 +196,7 @@ uname -r
 gcc --version
 ```
 
-The versions should match the version of this grid depending on your Ubuntu version, see <https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#system-requirements> (versions should be the same or newer).
+The versions should match the version of this grid depending on your Ubuntu version, see <https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#system-requirements> (versions should be the same or newer). This grid is regularly updated as new versions are released. The CUDA tutorial provides some instructions to update your kernel and compiler if needed.
 
 ### CUDA Installation
 
@@ -211,19 +208,48 @@ ls /usr/local/cuda*
 
 The names of the folders are the versions already installed. If you have no folder called cuda-11.2 continue to read this section otherwise you go directly in CuDNN installation section.
 
-You can delete all unwanted versions of CUDA by removing them in their directory:
+**It is highly recommended to delete all unwanted versions of CUDA** by removing them in their directory:
 
 ```script
 sudo rm -r /usr/local/cuda-X
 ```
 
-Now it's time to install CUDA. Find the 11.2.2 version in the CUDA archives : <https://developer.nvidia.com/cuda-toolkit-archive>. Then click on the button that corresponds to you set-up. And choose **deb (local)** option.
+Now it's time to install CUDA 11.2.
+
+### On Ubuntu 18.04 or 20.04
+
+If you have the 18.04 or the 20.04 version of Ubuntu, I advice you to install CUDA manually from archives. Find the 11.2.2 version in the CUDA archives : <https://developer.nvidia.com/cuda-toolkit-archive>. Then click on the button that corresponds to you set-up. And choose **deb (local)** option.
 
 For exemple with a x86_64 Ubuntu 20.04:
 
 ![alt text](docs/cuda.png)
 
 Then follow the instruction to download CUDA. **Note**: you should  download CUDA and CuDNN files on a dedicated installation folder. To do it, create a folder in `~/` and run the commands on it.
+
+### On Ubuntu 22.04
+
+If you have the 22.04 version, you must install CUDA via the auto-installer. Execute the following command to get the good version of gcc (the one by default is too recent for CUDA 11.2) and get the executable:
+
+```script
+sudo apt-get install gcc-9 g++-9
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 10
+update-alternatives --config gcc
+wget https://developer.download.nvidia.com/compute/cuda/11.2.2/local_installers/cuda_11.2.2_460.32.03_linux.run
+sudo sh cuda_11.2.2_460.32.03_linux-run
+```
+
+Then, you will have a message to start the installation, click on "Continue" then write "accept" in the message box and press enter. After that, **you should NOT install the proposed drivers**. Uncheck the driver line before installing like in the picture below and click on "Install". Then ignore warning messages that suggest to change the drivers version.
+
+![alt text](docs/uncheck_drivers.png)
+
+Redefine your gcc version with the original one (11 by default):
+
+``` script
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 1
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 2
+```
+
+### Finish installation
 
 You can verify the cuda version in your computer with the command above. You should have a `cuda` folder and other `cuda-x` folders including at least `cuda-11.2`.
 
@@ -243,13 +269,19 @@ Now click on the button "Download CuDNN" and check "I agree to the terms". Some 
 
 ![alt text](docs/cudnn_archives.png)
 
-Then choose CuDNN 8.1.1 version **that is compatible with CUDA 11.2**. And download **cuDNN Library for Linux (x86_64)**. Move the file in the folder containing the previous CUDA installation file. Open a terminal in this folder and run the following command to unpack the libraries, to copy them in cuda foder and to make them executable:
+Then choose CuDNN 8.1.1 version **that is compatible with CUDA 11.2**. And download **cuDNN Library for Linux ([your architecture])** (ex x86_64). Move the file in the folder containing the previous CUDA installation file. Open a terminal in this folder and run the following command to unpack the libraries, to copy them in cuda foder and to make them executable:
 
 ```script
 tar -xzvf cudnn-<file_name>.tgz
 sudo cp cuda/include/cudnn*.h /usr/local/cuda/include
 sudo cp -P cuda/lib64/libcudnn* /usr/local/cuda/lib64
 sudo chmod a+r /usr/local/cuda/include/cudnn*.h /usr/local/cuda/lib64/libcudnn*
+```
+
+Verify that you have some cuDNN libraries in your CUDA folder:
+
+```script
+ls /usr/local/cuda/lib64/libcudnn*
 ```
 
 Now if you accidentally remove your libraries, you can re-install them kickly with the files saved in your installation folder.
@@ -269,20 +301,16 @@ export PATH="/usr/local/cuda/bin:$PATH"
 export LD_LIBRARY_PATH="/usr/local/cuda/lib64:$LD_LIBRARY_PATH"
 ```
 
-Now restart your bash:
-
-```script
-bash
-```
+Now restart your bash with the command: `bash`.
 
 ### Verify GPU acceleration with Tensorflow, Pytorch and Jax
 
-In this sub-section we will test if Tensorflow, Pytorch and Jax find the access of all libraries it needs to work with the GPU. Note that the command line to install Jax can depend on your CUDA and cuDNN configurations (see [the instalation guide](https://github.com/google/jax#installation) for more details) but with the versions above, it can be with a single line (see below).
+In this sub-section we will test if Tensorflow, Pytorch and Jax find the access of all libraries it needs to work with the GPU. Note that the command line to install Jax can depend on your CUDA and cuDNN configurations (see [the instalation guide](https://github.com/google/jax#installation) for more details) but with the versions above, it can be with the line below.
 
 Create a temporary environment with tensorflow, pytorch and Jax on it:
 
 ```script
-mktmpenv -p python3.9
+mktmpenv -p python3.10
 pip install -U pip
 pip install tensorflow torch
 pip install --upgrade "jax[cuda]" -f https://storage.googleapis.com/jax-releases/jax_releases.html
@@ -302,20 +330,18 @@ True
 True
 ```
 
-If all goes well, the logs of tensorflow after calling *tf.list_physical_devices("GPU")* should be like:
-
-![alt text](docs/tf_logs.png)
+If all goes well, the logs of tensorflow after calling *tf.list_physical_devices("GPU")* should not return warning or error messages.
 
 Plus, importing Jax does not result on the warning message: *No GPU found. Falling back to CPU.*
 
-If the previous commands return `False` you have to check where is the problem. Tensorflow's logs are precious to finding the problem. Each lines begins with **I** if it is information, **W** if it is warnings and **E** or **Err** if it is error. So do take care of **W** and **E** lines (warnings will lock your GPU use like errors so don't ignore them).
+If the previous commands return `False` you have to check where is the problem. Tensorflow's logs are precious to finding the problem. Each lines begins with **I** if it is information, **W** if it is warnings and **E** or **Err** if it is error. So do take care of **W** and **E** lines (warning messages should not be ignore here as they often block the gpu usage).
 
 The problems could be due to:
 
 * some libraries were not found. In this case you should recheck the CUDA version and the environment variables set in `.bashrc`. If the only missing library is "cudnn", the CuDNN installation is  certainly the problem.
-* mismatch version between kernel and drivers CUDA versions. In this case changing the driver version to match the kernel CUDA version could resolve the problem
+* mismatch version between kernel and drivers CUDA versions. In this case update the driver version to the newest could resolve the problem
 
-Note that in this environment, Tensorflow and Jax allocate almost all your GPU-memory for their single use after the first operation so it will be conflict if you use them in parallel. This environment is only use to check the GPU usage for both frameworks and you can now remove it with: `desactivate`.
+Be cautious if you wan to test Tensorflow and Jax GPU computation because they allocate almost all your GPU-memory after the first operation so it will be conflict if you use them in parallel. Now you can now remove the virtual environment with: `desactivate`.
 
 ## VSCode
 
@@ -376,6 +402,4 @@ Basically what you must avoid:
 
 In this case you should first `conda deactivate` two times (to leave "conda_env" and "base") and then `deactivate`.
 
-## End of the tutorial
-
-This is the end of this tutorial, if you have any issue, please contact me or raise an issue in this repository.
+This is the end of this tutorial, if you have any issue, please contact me or raise an issue in this repository. I hope it will be usefull for you!
