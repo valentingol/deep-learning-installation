@@ -284,7 +284,7 @@ Verify that you have some cuDNN libraries in your CUDA folder:
 ls /usr/local/cuda/lib64/libcudnn*
 ```
 
-Now, you can do the same things to install cuDNN 8.2.2 compatible with CUDA 10.2 in order to use Jax properly. Note that it is not a problem to cumul multiple cuDNN versions in the same CUDA folder, the frameworks will automatically use the versions they need without any conflicts.
+Now, you can do the same things to install cuDNN 8.2.2 compatible with CUDA 11.2 in order to use Jax properly. Note that it is not a problem to cumul multiple cuDNN versions in the same CUDA folder, the frameworks will automatically use the versions they need without any conflicts.
 
 ### Set environment variables
 
