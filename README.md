@@ -8,7 +8,7 @@ Time: 1h30 / 2h
 
 This tutorial is carried out as part of the IA [CentraleSupelec](https://www.centralesupelec.fr/) association: [***Les Automatants***](https://automatants.cs-campus.fr/).
 
-This tutorial provide a step-by-step pipeline to install an effective Python set-up optimized for deep learning for Ubuntu LTS, containing libraries to use efficiently in particular the last versions of [Tensorflow](https://www.tensorflow.org/?hl=fr), [Pytorch](https://pytorch.org/) and [Jax](https://jax.readthedocs.io/en/latest/index.html) with the GPU and a comfortable environment of work with flexible and the highly customizable editor [VSCode](https://code.visualstudio.com/) and very convenient environment manager (and fast to use) [Virtualenv](https://pypi.org/project/virtualenv/) with its wrapper [VirtualenvWrapper](https://virtualenvwrapper.readthedocs.io/en/latest/).
+This tutorial provide a step-by-step pipeline to install an effective Python set-up optimized for deep learning for Ubuntu LTS, containing libraries to use efficiently in particular the last versions of [Tensorflow](https://www.tensorflow.org/?hl=fr), [Pytorch](https://pytorch.org/) and [Jax](https://jax.readthedocs.io/en/latest/index.html) with the GPU usage and a comfortable environment of work with flexible and the highly customizable editor [VSCode](https://code.visualstudio.com/) and very convenient environment manager (and fast to use) [Virtualenv](https://pypi.org/project/virtualenv/) with its wrapper [VirtualenvWrapper](https://virtualenvwrapper.readthedocs.io/en/latest/).
 
 ![alt text](./docs/logos.png)
 
@@ -20,13 +20,13 @@ The installations and corresponding versions proposed here are:
 
 * Python 3.10
 * Virtualenv & VirtualenvWrapper
-* CUDA 11.2 and CuDNN 8.1
+* CUDA 11.2 and cuDNN 8.1 & 8.2
 * VSCode
 * miniconda (optional)
 
-NOTE: **you can easily install other versions replacing the versions mentioned in this tutorial but these version was tested in 2022, they work well together and run the current last versions of deep learning framework**.
+NOTE: **you can easily install other versions replacing the versions mentioned in this tutorial. These versions were tested in 2022, they work well together and run the current last versions of deep learning framework**.
 
-To choose good versions of CUDA and cuDNN from a Tensorflow version, you can check this page: <https://www.tensorflow.org/install/source?hl=en#gpu>. The last version is compatible with CUDA 11.2 and CuDNN 8.1 so we are going to install these versions. Note that most of CUDA versions are compatible with last Pytorch versions (and cuDNN is not necessary for Pytorch). Finally, Jax is compatible with CUDA 11.1 or newer and cuDNN 8.0.2 or newer, some combination require building from source (complete tutorial [here](https://github.com/google/jax#installation)) but not the versions used in this tutorial.
+To choose good versions of CUDA and cuDNN from a Tensorflow version, you can check this page: <https://www.tensorflow.org/install/source?hl=en#gpu>. The last version is compatible with CUDA 11.2 and cuDNN 8.1 so we are going to install these versions. Note that most of CUDA versions are compatible with last Pytorch versions (and cuDNN is not necessary for Pytorch). Finally, Jax is compatible with CUDA 11.1 or newer and cuDNN 8.2 or newer, thus we install cuDNN 8.2 as well in this tutorial (it is not required if you don't use Jax). Some combination of CUDA and cuDNN versions require building from source (complete tutorial [here](https://github.com/google/jax#installation)) but not the versions used in this tutorial.
 
 ## Before to start
 
@@ -42,9 +42,9 @@ If you have parenthesis with a name on it, it means that you are in a virtual en
 
 ## Install Python
 
-[**Python**](https://www.python.org/) is by far the most popular language for machine learning both in the research and professional world. The reason is that Pyhton is an intuitive and permissive language with a ton of optimized ML and processing libraries. You will to install the **3.10 version** in this tutorial but you can install all versions you want by the same way (in particular versions that are in alpha/beta stage).
+[**Python**](https://www.python.org/) is by far the most popular language for machine learning both in the research and professional world. The reason is that Pyhton is an intuitive and permissive language with a ton of optimized ML and processing libraries. You will to install the **3.10 version** in this tutorial but you can install all versions you want by the same way (plus versions that are in alpha/beta stage).
 
-Now you can verify if you have already Python3.9 installed on your computer. To do this, you can display all files in `/usr/bin` whose name begin with "python":
+Now you can verify if you have already Python3.10 installed on your computer. To do this, you can display all files in `/usr/bin` whose name begin with "python":
 
 ```script
 ls /usr/bin/python3*
@@ -157,7 +157,7 @@ deactivate
 
 Note that if you have Ubuntu 22.04, the default python version is `python3.10` and so you do not have to specify "-p python3.10". Run command `python3 --version` to verify.
 
-## CUDA and CuDNN
+## CUDA and cuDNN
 
 **WARNING** : this section deals with GPU-accelerated libraries using NVIDIA GPU. Please check *Before to start* section to verify that you have the right GPU.
 
@@ -206,7 +206,7 @@ You can verify your previously installed CUDA versions (if you have ones) with t
 ls /usr/local/cuda*
 ```
 
-The names of the folders are the versions already installed. If you have no folder called cuda-11.2 continue to read this section otherwise you go directly in CuDNN installation section.
+The names of the folders are the versions already installed. If you have no folder called cuda-11.2 continue to read this section otherwise you go directly in cuDNN installation section.
 
 **It is highly recommended to delete all unwanted versions of CUDA** by removing them in their directory:
 
@@ -224,7 +224,7 @@ For exemple with a x86_64 Ubuntu 20.04:
 
 ![alt text](docs/cuda.png)
 
-Then follow the instruction to download CUDA. **Note**: you should  download CUDA and CuDNN files on a dedicated installation folder. To do it, create a folder in `~/` and run the commands on it.
+Then follow the instruction to download CUDA. **Note**: you should  download CUDA and cuDNN files on a dedicated installation folder. To do it, create a folder in `~/` and run the commands on it.
 
 ### On Ubuntu 22.04
 
@@ -259,17 +259,17 @@ CUDA is globally a set of libraries that are generally installed as dependencies
 sudo apt-mark manual cuda-\*
 ```
 
-### CuDNN Installation
+### cuDNN Installation
 
-Now you will install CuDNN that contains libraries written in C used by Tensorflow. The link of the official tutorial is <https://docs.nvidia.com/deeplearning/cudnn/install-guide/index.html>. Once again, I summarize the installation below.
+Now you will install cuDNN that contains libraries written in C used by Tensorflow and Jax. The link of the official tutorial is <https://docs.nvidia.com/deeplearning/cudnn/install-guide/index.html>. Once again, I summarize the installation below.
 
-First go to the CuDNN page: <https://developer.nvidia.com/cudnn>. You must register an account to get access to the page so register yourself if it's the first time you try to download CuDNN. There is also a quick survey to complete or to skip. Otherwise just login in your account.
+First go to the cuDNN page: <https://developer.nvidia.com/cudnn>. You must register an account to get access to the page so register yourself if it's the first time you try to download cuDNN. There is also a quick survey to complete or to skip. Otherwise just login in your account.
 
-Now click on the button "Download CuDNN" and check "I agree to the terms". Some versions are proposed but they are not the versions we want. So click on "Archived cuDNN Releases"
+Now click on the button "Download cuDNN" and check "I agree to the terms". Some versions are proposed but they are not the versions we want. So click on "Archived cuDNN Releases"
 
 ![alt text](docs/cudnn_archives.png)
 
-Then choose CuDNN 8.1.1 version **that is compatible with CUDA 11.2**. And download **cuDNN Library for Linux ([your architecture])** (ex x86_64). Move the file in the folder containing the previous CUDA installation file. Open a terminal in this folder and run the following command to unpack the libraries, to copy them in cuda foder and to make them executable:
+Then choose cuDNN 8.1.1 version **that is compatible with CUDA 11.2**. And download **cuDNN Library for Linux ([your architecture])** (ex x86_64). Move the file in the folder containing the previous CUDA installation file. Open a terminal in this folder and run the following command to unpack the libraries, to copy them in cuda foder and to make them executable:
 
 ```script
 tar -xzvf cudnn-<file_name>.tgz
@@ -284,11 +284,11 @@ Verify that you have some cuDNN libraries in your CUDA folder:
 ls /usr/local/cuda/lib64/libcudnn*
 ```
 
-Now if you accidentally remove your libraries, you can re-install them kickly with the files saved in your installation folder.
+Now, you can do the same things to install cuDNN 8.2.2 compatible with CUDA 10.2 in order to use Jax properly. Note that it is not a problem to cumul multiple cuDNN versions in the same CUDA folder, the frameworks will automatically use the versions they need without any conflicts.
 
 ### Set environment variables
 
-Now you must specify the path of your new libraries at the end of the `.bashrc` file:
+It is time to specify the path of your new libraries at the end of the `.bashrc` file:
 
 ```script
 cd
@@ -305,7 +305,7 @@ Now restart your bash with the command: `bash`.
 
 ### Verify GPU acceleration with Tensorflow, Pytorch and Jax
 
-In this sub-section we will test if Tensorflow, Pytorch and Jax find the access of all libraries it needs to work with the GPU. Note that the command line to install Jax can depend on your CUDA and cuDNN configurations (see [the instalation guide](https://github.com/google/jax#installation) for more details) but with the versions above, it can be with the line below.
+In this sub-section we will test if Tensorflow, Pytorch and Jax find the access of all libraries it needs to work with the GPU. Note that the command line to install Jax can depend on your CUDA and cuDNN configurations (see [the installation guide](https://github.com/google/jax#installation) for more details) but with the versions above, it can be with the line below.
 
 Create a temporary environment with tensorflow, pytorch and Jax on it:
 
@@ -338,7 +338,7 @@ If the previous commands return `False` you have to check where is the problem. 
 
 The problems could be due to:
 
-* some libraries were not found. In this case you should recheck the CUDA version and the environment variables set in `.bashrc`. If the only missing library is "cudnn", the CuDNN installation is  certainly the problem.
+* some libraries were not found. In this case you should recheck the CUDA version and the environment variables set in `.bashrc`. If the only missing library is "cudnn", the cuDNN installation is  certainly the problem.
 * mismatch version between kernel and drivers CUDA versions. In this case update the driver version to the newest could resolve the problem
 
 Be cautious if you wan to test Tensorflow and Jax GPU computation because they allocate almost all your GPU-memory after the first operation so it will be conflict if you use them in parallel. Now you can now remove the virtual environment with: `desactivate`.

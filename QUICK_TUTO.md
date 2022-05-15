@@ -8,7 +8,7 @@ Installed versions:
 
 * Python 3.9
 * Virtualenv & VirtualenvWrapper
-* CUDA 11.2 and CuDNN 8.1 (versions compatible with tensorflow [here](https://www.tensorflow.org/install/source?hl=en#gpu))
+* CUDA 11.2 and CuDNN 8.1 & 8.2 (versions compatible with tensorflow [here](https://www.tensorflow.org/install/source?hl=en#gpu))
 * VSCode
 * miniconda (optional)
 
@@ -126,9 +126,9 @@ sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 2
 sudo apt-mark manual cuda-\*
 ```
 
-### cuDNN (8.1.1)
+### cuDNN (8.1.1 & 8.2.2)
 
-CuDNN page: <https://developer.nvidia.com/cudnn>. Click on "I agree to the terms" and "Archived cuDNN Releases". Be aware that the installed version is compatible with CUDA 11.2. Install the `.tgz` and run:
+CuDNN page: <https://developer.nvidia.com/cudnn>. Click on "I agree to the terms" and "Archived cuDNN Releases". Look for 8.1.1 version compatible with CUDA 11.2. Install the `.tgz` and run:
 
 ```script
 tar -xzvf cudnn-<file_name>.tgz
@@ -136,6 +136,8 @@ sudo cp cuda/include/cudnn*.h /usr/local/cuda/include
 sudo cp -P cuda/lib64/libcudnn* /usr/local/cuda/lib64
 sudo chmod a+r /usr/local/cuda/include/cudnn*.h /usr/local/cuda/lib64/libcudnn*
 ```
+
+Do the same for cuDNN 8.2.2 (compatible with CUDA 11.2).
 
 ### Set environment variables
 
