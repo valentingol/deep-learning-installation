@@ -6,9 +6,9 @@ This tutorial is a quick version of the main tutorial (in `README.md`) except th
 
 Installed versions:
 
-* Python 3.9
+* Python 3.10 and 3.11
 * Virtualenv & VirtualenvWrapper
-* CUDA 11.2 and CuDNN 8.1 & 8.2 (versions compatible with tensorflow [here](https://www.tensorflow.org/install/source?hl=en#gpu))
+* CUDA 11.8 and CuDNN 8.6 (versions compatible with tensorflow [here](https://www.tensorflow.org/install/source?hl=en#gpu))
 * VSCode
 * miniconda (optional)
 
@@ -22,13 +22,15 @@ Check installed version:
 ls /usr/bin/python3*
 ```
 
-Install Python 3.9:
+Install Python 3.10:
 
 ```script
 sudo add-apt-repository ppa:deadsnakes/ppa
 sudo apt update
-sudo apt install python3.9
+sudo apt install python3.10
 ```
+
+Work also by replacing `python3.10` by `python3.11`.
 
 ## Virtualenv & VirtualenvWrapper
 
@@ -87,7 +89,7 @@ gcc --version
 
 Kernel and gcc should match the tab: <https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#system-requirements> (same versions or newer)
 
-### CUDA (11.2)
+### CUDA (11.6)
 
 Check current versions:
 
@@ -95,30 +97,9 @@ Check current versions:
 ls /usr/local/cuda*
 ```
 
-* For Ubuntu 18.4 or 20.04:
-
 Find version in the CUDA archives : <https://developer.nvidia.com/cuda-toolkit-archive>. Then click on the button that corresponds to you set-up. And choose **deb (local)** option.
 
 Then follow the instruction to download CUDA (run the command in a folder dedicated to installation to don't loose them).
-
-* For Ubuntu 22.04:
-
-```script
-sudo apt-get install gcc-9 g++-9
-sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 10
-update-alternatives --config gcc
-wget https://developer.nvidia.com/compute/cuda/11.2.2/local_installers/cuda_11.2.2_460.32.03_linux-run
-sudo sh cuda_11.2.2_460.32.03_linux-run
-```
-
-Uncheck the driver installation before installing the toolkit.
-
-Come back to gcc 11:
-
-``` script
-sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 1
-sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 2
-```
 
 * Finally, mark the folder as manually installed:
 
@@ -126,18 +107,16 @@ sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 2
 sudo apt-mark manual cuda-\*
 ```
 
-### cuDNN (8.1.1 & 8.2.2)
+### cuDNN 8.6
 
-CuDNN page: <https://developer.nvidia.com/cudnn>. Click on "I agree to the terms" and "Archived cuDNN Releases". Look for 8.1.1 version compatible with CUDA 11.2. Install the `.tgz` and run:
+CuDNN page: <https://developer.nvidia.com/cudnn>. Click on "I agree to the terms" and "Archived cuDNN Releases". Look for 8.6 version compatible with CUDA 11.x. Install the Tar file and run:
 
 ```script
-tar -xzvf cudnn-<file_name>.tgz
-sudo cp cuda/include/cudnn*.h /usr/local/cuda/include
-sudo cp -P cuda/lib64/libcudnn* /usr/local/cuda/lib64
+tar -xvf cudnn-<file_name>.tar.xz
+sudo cp cudnn-<file_name>-archive/include/cudnn*.h /usr/local/cuda/include
+sudo cp -P cudnn-<file_name>-archive/lib/libcudnn* /usr/local/cuda/lib64
 sudo chmod a+r /usr/local/cuda/include/cudnn*.h /usr/local/cuda/lib64/libcudnn*
 ```
-
-Do the same for cuDNN 8.2.2 (compatible with CUDA 11.2).
 
 ### Set environment variables
 
@@ -154,7 +133,7 @@ Restart the bash.
 ### Check installation
 
 ```script
-mktmpenv -p python3.9
+mktmpenv -p python3.10
 pip install -U pip
 pip install tensorflow torch
 pip install --upgrade "jax[cuda]" -f https://storage.googleapis.com/jax-releases/jax_releases.html

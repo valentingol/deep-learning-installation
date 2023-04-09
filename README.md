@@ -2,7 +2,7 @@
 
 Author : Valentin Goldité ([GitHub:valentingol](https://github.com/))
 
-Update : **April 2022**
+Update : **April 2023**
 
 Time: 1h30 / 2h
 
@@ -18,19 +18,19 @@ You need a working **Ubuntu LTS** (22.04, 20.04 or 18.04) to run this tutorial. 
 
 The installations and corresponding versions proposed here are:
 
-* Python 3.10
+* Python 3.10 and 3.11
 * Virtualenv & VirtualenvWrapper
-* CUDA 11.2 and cuDNN 8.1 & 8.2
+* CUDA 11.8 and cuDNN 8.6
 * VSCode
 * miniconda (optional)
 
-NOTE: **you can easily install other versions replacing the versions mentioned in this tutorial. These versions were tested in 2022, they work well together and run the current last versions of deep learning framework**.
+NOTE: **you can easily install other versions replacing the versions mentioned in this tutorial. These versions were tested in 2023, they work well together and run the current last versions of deep learning framework**.
 
-To choose good versions of CUDA and cuDNN from a Tensorflow version, you can check this page: <https://www.tensorflow.org/install/source?hl=en#gpu>. The last version is compatible with CUDA 11.2 and cuDNN 8.1 so we are going to install these versions. Note that most of CUDA versions are compatible with last Pytorch versions (and cuDNN is not necessary for Pytorch). Finally, Jax is compatible with CUDA 11.1 or newer and cuDNN 8.2 or newer, thus we install cuDNN 8.2 as well in this tutorial (it is not required if you don't use Jax). Some combination of CUDA and cuDNN versions require building from source (complete tutorial [here](https://github.com/google/jax#installation)) but not the versions used in this tutorial.
+To choose good versions of CUDA and cuDNN from a Tensorflow version, you can check this page: <https://www.tensorflow.org/install/source?hl=en#gpu>. The last version is compatible with CUDA 11.8 and cuDNN 8.6 so we are going to install these versions. Note that most of CUDA versions are compatible with last Pytorch versions (and cuDNN is not necessary for Pytorch). Finally, Jax is compatible with CUDA 11.1 or newer and cuDNN 8.2 or newer. Some combination of CUDA and cuDNN versions require building from source (complete tutorial [here](https://github.com/google/jax#installation)) but not the versions used in this tutorial.
 
 ## Before to start
 
-All installations in this tutorial could be installed independently, the relevance of each are discussed in its dedicated session. It's recomended to install all of them, except miniconda that is optional and use to handle with conda-exclusive libraries if needed. Plus, **it's highly recommended to completely uninstall Anaconda at the beginning if it is already installed** to avoid conflicts of virtual environment and environment variables. Anaconda provided no essential features for ML and often make some unwanted changes in your computer so you can safely uninstall it forever. If you want to use Jupyter notebooks, don't worry, it will be available on VSCode too.
+All installations in this tutorial could be installed independently, the relevance of each are discussed in its dedicated session. It's recommended to install all of them, except miniconda that is optional and use to handle with conda-exclusive libraries if needed. Plus, **it's highly recommended to completely uninstall Anaconda at the beginning if it is already installed** to avoid conflicts of virtual environment and environment variables. Anaconda provided no essential features for ML and often make some unwanted changes in your computer so you can safely uninstall it forever. If you want to use Jupyter notebooks, don't worry, it will be available on VSCode too.
 
 Then open your terminal (**Ctrl+Alt+T**). Before to begin, it's important to **leave all virtual environments** to make your installations globally.
 
@@ -38,11 +38,11 @@ So you should have no parenthesis with a name inside at the beginning of your li
 
 ![alt text](docs/outside_virtual_env.png)
 
-If you have parenthesis with a name on it, it means that you are in a virtual environment. You can try the following command to leave it by running `conda deactivate` if you are in a conda environment and `deactivate` if you are in virtualenv environment (try the two if you don't know the kind of environmnent you are in).
+If you have parenthesis with a name on it, it means that you are in a virtual environment. You can try the following command to leave it by running `conda deactivate` if you are in a conda environment and `deactivate` if you are in virtualenv environment (try the two if you don't know the kind of environment you are in).
 
 ## Install Python
 
-[**Python**](https://www.python.org/) is by far the most popular language for machine learning both in the research and professional world. The reason is that Pyhton is an intuitive and permissive language with a ton of optimized ML and processing libraries. You will to install the **3.10 version** in this tutorial but you can install all versions you want by the same way (plus versions that are in alpha/beta stage).
+[**Python**](https://www.python.org/) is by far the most popular language for machine learning both in the research and professional world. The reason is that Python is an intuitive and permissive language with a ton of optimized ML and processing libraries. You will to install the **3.10 version** in this tutorial but you can install all versions you want by the same way (plus versions that are in alpha/beta stage). **Note that you can also install Python 3.11 with the same way and all the frameworks considered in this tutorial (Pytorch, Jax, Tensorflow) are compatible.**
 
 Now you can verify if you have already Python3.10 installed on your computer. To do this, you can display all files in `/usr/bin` whose name begin with "python":
 
@@ -208,17 +208,15 @@ ls /usr/local/cuda*
 
 The names of the folders are the versions already installed. If you have no folder called cuda-11.2 continue to read this section otherwise you go directly in cuDNN installation section.
 
-**It is highly recommended to delete all unwanted versions of CUDA** by removing them in their directory:
+You can delete all unwanted versions of CUDA by removing them in their directory:
 
 ```script
 sudo rm -r /usr/local/cuda-X
 ```
 
-Now it's time to install CUDA 11.2.
+Now it's time to install CUDA 11.8.
 
-### On Ubuntu 18.04 or 20.04
-
-If you have the 18.04 or the 20.04 version of Ubuntu, I advice you to install CUDA manually from archives. Find the 11.2.2 version in the CUDA archives : <https://developer.nvidia.com/cuda-toolkit-archive>. Then click on the button that corresponds to you set-up. And choose **deb (local)** option.
+I advice you to install CUDA manually from archives. Find the 11.8 version in the CUDA archives : <https://developer.nvidia.com/cuda-toolkit-archive>. Then click on the button that corresponds to you set-up. And choose **deb (local)** option.
 
 For exemple with a x86_64 Ubuntu 20.04:
 
@@ -226,32 +224,9 @@ For exemple with a x86_64 Ubuntu 20.04:
 
 Then follow the instruction to download CUDA. **Note**: you should  download CUDA and cuDNN files on a dedicated installation folder. To do it, create a folder in `~/` and run the commands on it.
 
-### On Ubuntu 22.04
-
-If you have the 22.04 version, you must install CUDA via the auto-installer. Execute the following command to get the good version of gcc (the one by default is too recent for CUDA 11.2) and get the executable:
-
-```script
-sudo apt-get install gcc-9 g++-9
-sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 10
-update-alternatives --config gcc
-wget https://developer.download.nvidia.com/compute/cuda/11.2.2/local_installers/cuda_11.2.2_460.32.03_linux.run
-sudo sh cuda_11.2.2_460.32.03_linux-run
-```
-
-Then, you will have a message to start the installation, click on "Continue" then write "accept" in the message box and press enter. After that, **you should NOT install the proposed drivers**. Uncheck the driver line before installing like in the picture below and click on "Install". Then ignore warning messages that suggest to change the drivers version.
-
-![alt text](docs/uncheck_drivers.png)
-
-Redefine your gcc version with the original one (11 by default):
-
-``` script
-sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 1
-sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 2
-```
-
 ### Finish installation
 
-You can verify the cuda version in your computer with the command above. You should have a `cuda` folder and other `cuda-x` folders including at least `cuda-11.2`.
+You can verify the cuda version in your computer with the command above. You should have a `cuda` folder and other `cuda-x` folders including at least `cuda-11.8`.
 
 CUDA is globally a set of libraries that are generally installed as dependencies of other packages. It is possible to install some packages that are depend to CUDA and after removing it, apt could consider that CUDA are no longer necessary in your computer. And it will propose you to remove it with `apt autoremove`. But as you will use it for ML packages, you don't want to uninstall it. Therefore, you must precise to apt that you installed CUDA manually and prevent it to suggest you to remove it:
 
@@ -269,22 +244,20 @@ Now click on the button "Download cuDNN" and check "I agree to the terms". Some 
 
 ![alt text](docs/cudnn_archives.png)
 
-Then choose cuDNN 8.1.1 version **that is compatible with CUDA 11.2**. And download **cuDNN Library for Linux ([your architecture])** (ex x86_64). Move the file in the folder containing the previous CUDA installation file. Open a terminal in this folder and run the following command to unpack the libraries, to copy them in cuda foder and to make them executable:
+Then choose cuDNN 8.6 version **that is compatible with CUDA 11.x**. And download **cuDNN Library for Linux ([your architecture]) Tar file** (ex x86_64). Move the file in the folder containing the previous CUDA installation file. Open a terminal in this folder and run the following command to unpack the libraries, to copy them in cuda foder and to make them executable:
 
 ```script
-tar -xzvf cudnn-<file_name>.tgz
-sudo cp cuda/include/cudnn*.h /usr/local/cuda/include
-sudo cp -P cuda/lib64/libcudnn* /usr/local/cuda/lib64
+tar -xvf cudnn-<file_name>.tar.xz
+sudo cp cudnn-<file_name>-archive/include/cudnn*.h /usr/local/cuda/include
+sudo cp -P cudnn-<file_name>-archive/lib/libcudnn* /usr/local/cuda/lib64
 sudo chmod a+r /usr/local/cuda/include/cudnn*.h /usr/local/cuda/lib64/libcudnn*
 ```
 
-Verify that you have some cuDNN libraries in your CUDA folder:
+Verify that you have some 8.6 cuDNN libraries in your CUDA folder:
 
 ```script
 ls /usr/local/cuda/lib64/libcudnn*
 ```
-
-Now, you can do the same things to install cuDNN 8.2.2 compatible with CUDA 11.2 in order to use Jax properly. Note that it is not a problem to cumul multiple cuDNN versions in the same CUDA folder, the frameworks will automatically use the versions they need without any conflicts.
 
 ### Set environment variables
 
@@ -312,8 +285,9 @@ Create a temporary environment with tensorflow, pytorch and Jax on it:
 ```script
 mktmpenv -p python3.10
 pip install -U pip
-pip install tensorflow torch
-pip install --upgrade "jax[cuda]" -f https://storage.googleapis.com/jax-releases/jax_releases.html
+pip install tensorflow
+pip install torch --index-url https://download.pytorch.org/whl/cu118
+pip install --upgrade "jax[cuda11_local]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
 ```
 
 Tensorflow, Pytorch and Jax should be installed now. But it does not mean that they work with GPU. Run a python console and check the GPU usage. First start a Python session: `python` then run the following lines:
@@ -330,22 +304,20 @@ True
 True
 ```
 
-If all goes well, the logs of tensorflow after calling *tf.list_physical_devices("GPU")* should not return warning or error messages.
+If all goes well, the logs of tensorflow after calling *tf.list_physical_devices("GPU")* should not return warning or error messages. Plus, importing Jax does not result on the warning message: *No GPU found. Falling back to CPU.* You can also manipulate tensors with the three frameworks to check if the GPU is used (be careful, tensorflow and jax allocate most of VRAM on the first operations so you should restart the python console to check both frameworks).
 
-Plus, importing Jax does not result on the warning message: *No GPU found. Falling back to CPU.*
-
-If the previous commands return `False` you have to check where is the problem. Tensorflow's logs are precious to finding the problem. Each lines begins with **I** if it is information, **W** if it is warnings and **E** or **Err** if it is error. So do take care of **W** and **E** lines (warning messages should not be ignore here as they often block the gpu usage).
+If the previous commands return `False` you have to check where is the problem. Tensorflow's logs are precious to finding the problem. Each lines begins with **I** if it is information, **W** if it is warnings and **E** or **Err** if it is error. So do take care of **W** and **E** lines (warning messages should not be ignore here as they often block the gpu usage). The warning `W: TF-TRT Warning: Could not find TensorRT` can be ignored [see here](https://github.com/tensorflow/tensorrt/issues/252).
 
 The problems could be due to:
 
 * some libraries were not found. In this case you should recheck the CUDA version and the environment variables set in `.bashrc`. If the only missing library is "cudnn", the cuDNN installation is  certainly the problem.
 * mismatch version between kernel and drivers CUDA versions. In this case update the driver version to the newest could resolve the problem
 
-Be cautious if you wan to test Tensorflow and Jax GPU computation because they allocate almost all your GPU-memory after the first operation so it will be conflict if you use them in parallel. Now you can now remove the virtual environment with: `desactivate`.
+Now you can now remove the virtual environment with: `desactivate`.
 
 ## VSCode
 
-There are many IDE and editor for Python developement but VSCode is by far the most popular (with PyCharm). There are multiple reasons for that. First, VSCode is **usable with all existing (or almost) informatic langage**. So you can work on projects that combines fils for instance written in Python, Rust, C, C++, Markdown, Lua, Matlab... without changing your editor software! Moreover, VSCode proposes **a ton of extension to customize... basically everything**. So you can add a lot of autocomplete functions ([GitHubCopilot](https://copilot.github.com/) is the current best autocompleter par excellence), choose your favorite linter, work with interactive windows or notebooks, and so on. You also have a tab to see all files and folders on your project and switch between your different project easily. You can even set a virtual environment for each of your projects to activate automatically the good environment when you change your project. And finally, you have an **integrated terminal** so you can continue to use the terminal to work on your environment/project without changing your window. Note that VSCode extensions make it as convenient as Pycharm but with more options and more flexible.
+There are many IDE and editor for Python development but VSCode is by far the most popular (with PyCharm). There are multiple reasons for that. First, VSCode is **usable with all existing (or almost) informatic langage**. So you can work on projects that combines fils for instance written in Python, Rust, C, C++, Markdown, Lua, Matlab... without changing your editor software! Moreover, VSCode proposes **a ton of extension to customize... basically everything**. So you can add a lot of autocomplete functions ([GitHubCopilot](https://copilot.github.com/) is the current best auto-completer par excellence), choose your favorite linter, work with interactive windows or notebooks, and so on. You also have a tab to see all files and folders on your project and switch between your different project easily. You can even set a virtual environment for each of your projects to activate automatically the good environment when you change your project. And finally, you have an **integrated terminal** so you can continue to use the terminal to work on your environment/project without changing your window. Note that VSCode extensions make it as convenient as Pycharm but with more options and more flexible.
 
 Download the .deb file from the website : <https://code.visualstudio.com/download>. And run the following command in the folder where it's installed and launch it:
 
