@@ -6,13 +6,13 @@ This tutorial is a quick version of the main tutorial (in `README.md`) except th
 
 Installed versions:
 
-* Python 3.10 and 3.11
+* Python 3.11
 * Virtualenv & VirtualenvWrapper
-* CUDA 11.8 and CuDNN 8.6 (versions compatible with tensorflow [here](https://www.tensorflow.org/install/source?hl=en#gpu))
+* CUDA 12.2.2 and CuDNN 8.9 (versions compatible with tensorflow [here](https://www.tensorflow.org/install/source?hl=en#gpu))
 * VSCode
 * miniconda (optional)
 
-First, uninstall Anaconda if you have it installed. Skip the *CUDA and cuDNN* section if you have not a NVIDIA GPU with compute capability 3.5 or higher (check [this page](https://developer.nvidia.com/cuda-gpus#collapse4) to get compute capability of the device). Basically, a GTX 780 or newer is required.
+First, uninstall Anaconda if you have it installed. Skip the *CUDA and cuDNN* section if you have not a NVIDIA GPU with compute capability 5.2 or higher (check [this page](https://developer.nvidia.com/cuda-gpus#collapse4) to get compute capability of the device). Basically, a GTX 950 or newer is required.
 
 ## Python
 
@@ -22,15 +22,13 @@ Check installed version:
 ls /usr/bin/python3*
 ```
 
-Install Python 3.10:
+Install Python 3.11:
 
 ```script
 sudo add-apt-repository ppa:deadsnakes/ppa
 sudo apt update
-sudo apt install python3.10
+sudo apt install python3.11
 ```
-
-Work also by replacing `python3.10` by `python3.11`.
 
 ## Virtualenv & VirtualenvWrapper
 
@@ -89,7 +87,7 @@ gcc --version
 
 Kernel and gcc should match the tab: <https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#system-requirements> (same versions or newer)
 
-### CUDA (11.6)
+### CUDA (12.2.2)
 
 Check current versions:
 
@@ -107,9 +105,11 @@ Then follow the instruction to download CUDA (run the command in a folder dedica
 sudo apt-mark manual cuda-\*
 ```
 
-### cuDNN 8.6
+### cuDNN 8.9
 
-CuDNN page: <https://developer.nvidia.com/cudnn>. Click on "I agree to the terms" and "Archived cuDNN Releases". Look for 8.6 version compatible with CUDA 11.x. Install the Tar file and run:
+CuDNN page: <https://developer.nvidia.com/cudnn>. Click on "I agree to the terms" (optionally "Archived
+cuDNN Releases" if the correct version isn't proposed). Look for 8.9 version compatible with CUDA
+12.x. Install the Tar file and run:
 
 ```script
 tar -xvf cudnn-<file_name>.tar.xz
@@ -133,10 +133,11 @@ Restart the bash.
 ### Check installation
 
 ```script
-mktmpenv -p python3.10
+mktmpenv -p python3.11
 pip install -U pip
-pip install tensorflow torch
-pip install --upgrade "jax[cuda]" -f https://storage.googleapis.com/jax-releases/jax_releases.html
+pip install tensorflow
+pip install torch
+pip install --upgrade "jax[cuda12_pip]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
 ```
 
 [Tutorial](https://github.com/google/jax#installation) for Jax installation in case of troubles.
