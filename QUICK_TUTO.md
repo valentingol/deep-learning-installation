@@ -8,7 +8,7 @@ Installed versions:
 
 * Python 3.11
 * Virtualenv & VirtualenvWrapper
-* CUDA 12.2.2 and CuDNN 8.9 (versions compatible with tensorflow [here](https://www.tensorflow.org/install/source?hl=en#gpu))
+* CUDA 12.1.1 (and optional CuDNN 8.9)
 * VSCode
 * miniconda (optional)
 
@@ -87,7 +87,7 @@ gcc --version
 
 Kernel and gcc should match the tab: <https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#system-requirements> (same versions or newer)
 
-### CUDA (12.2.2)
+### CUDA (12.1.1)
 
 Check current versions:
 
@@ -95,9 +95,12 @@ Check current versions:
 ls /usr/local/cuda*
 ```
 
-Find version in the CUDA archives : <https://developer.nvidia.com/cuda-toolkit-archive>. Then click on the button that corresponds to you set-up. And choose **deb (local)** option.
+Find version in the CUDA archives : <https://developer.nvidia.com/cuda-toolkit-archive>.
+Then click on the button that corresponds to you set-up. And choose **deb (local)** option.
 
-Then follow the instruction to download CUDA (run the command in a folder dedicated to installation to don't loose them).
+Then follow the instruction to download CUDA (run the command in a folder dedicated to
+installation to don't loose them). You may need to specify the version of the cuda version
+when installing it, use this: `sudo apt-get install cuda=12.1.1-1`.
 
 * Finally, mark the folder as manually installed:
 
@@ -105,7 +108,10 @@ Then follow the instruction to download CUDA (run the command in a folder dedica
 sudo apt-mark manual cuda-\*
 ```
 
-### cuDNN 8.9
+### cuDNN 8.9 (optional)
+
+This section is optional. Some libraries like old versions of Tensorflow and some Jax installation
+procedures require cuDNN libraries. If you don't need it, you can skip this section.
 
 CuDNN page: <https://developer.nvidia.com/cudnn>. Click on "I agree to the terms" (optionally "Archived
 cuDNN Releases" if the correct version isn't proposed). Look for 8.9 version compatible with CUDA
@@ -130,14 +136,14 @@ export LD_LIBRARY_PATH="/usr/local/cuda/lib64:$LD_LIBRARY_PATH"
 
 Restart the bash.
 
-### Check installation
+### Check installation with the 3 main deep learning libraries all together
 
 ```script
 mktmpenv -p python3.11
 pip install -U pip
-pip install tensorflow
+pip install tensorflow[and-cuda]
 pip install torch
-pip install --upgrade "jax[cuda12_pip]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
+pip install "jax[cuda12_pip]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
 ```
 
 [Tutorial](https://github.com/google/jax#installation) for Jax installation in case of troubles.

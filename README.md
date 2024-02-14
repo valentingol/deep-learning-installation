@@ -22,13 +22,23 @@ The installations and corresponding versions proposed here are:
 
 * Python 3.11
 * Virtualenv & VirtualenvWrapper
-* CUDA 12.2 and cuDNN 8.9
+* CUDA 12.1.1 (and optional cuDNN 8.9)
 * VSCode
 * miniconda (optional)
 
 NOTE: **you can easily install other versions replacing the versions mentioned in this tutorial. These versions were tested in 2023, they work well together and run the current last versions of deep learning framework**.
 
-To choose good versions of CUDA and cuDNN from a Tensorflow version, you can check this page: <https://www.tensorflow.org/install/source?hl=en#gpu>. The last version is compatible with CUDA 12.2 and cuDNN 8.9 so we are going to install these versions. Note that most of CUDA versions are compatible with last Pytorch versions (and cuDNN is not necessary for Pytorch). Finally, Jax is compatible with CUDA 11.1 or newer and cuDNN 8.2 or newer. Some combination of CUDA and cuDNN versions require building from source (complete tutorial [here](https://github.com/google/jax#installation)) but not the versions used in this tutorial.
+Is cuDNN necessary?
+
+* If you only use Pytorch, the short answer is no. If you want to use pre-built wheels
+  of Jax or Tensorflow, you don't need cuDNN either.
+
+* If you want an older version of tensorflow where pre-built wheels don't exist or
+  simply don't want to use them, you can install cuDNN and check this page:
+  <https://www.tensorflow.org/install/source?hl=en#gpu> to find the good
+  combination of CUDA and cuDNN versions.
+* If you want to use the local CUDA instead of pre-built wheels to install JAx,
+  you need cuDNN 8.9 (see [here](https://github.com/google/jax#installation)).
 
 ## Before to start
 
@@ -206,7 +216,7 @@ You can verify your previously installed CUDA versions (if you have ones) with t
 ls /usr/local/cuda*
 ```
 
-The names of the folders are the versions already installed. If you have no folder called cuda-12.2 continue to read this section otherwise you go directly in cuDNN installation section.
+The names of the folders are the versions already installed. If you have no folder called cuda-12.1 continue to read this section otherwise you go directly in cuDNN installation section.
 
 You can delete all unwanted versions of CUDA by removing them in their directory:
 
@@ -214,29 +224,42 @@ You can delete all unwanted versions of CUDA by removing them in their directory
 sudo rm -r /usr/local/cuda-X
 ```
 
-Now it's time to install CUDA 12.2.
+Now it's time to install CUDA 12.1.
 
-I advice you to install CUDA manually from archives. Find the 12.2.2 version in the CUDA archives : <https://developer.nvidia.com/cuda-toolkit-archive>. Then click on the button that corresponds to your set-up. And choose **deb (local)** option.
+I advice you to install CUDA manually from archives. Find the 12.1.1 version in the CUDA archives :
+<https://developer.nvidia.com/cuda-toolkit-archive>. Then click on the button that corresponds
+to your set-up. And choose **deb (local)** option.
 
-For exemple with a x86_64 Ubuntu 20.04:
+For exemple with a x86_64 Ubuntu 22.04:
 
 ![alt text](assets/cuda.png)
 
-Then follow the instruction to download CUDA. **Note**: you should  download CUDA and cuDNN files on a dedicated installation folder. To do it, create a new folder in `~/` and run the commands on it.
+Then follow the instruction to download CUDA. **Note**: you should  download CUDA and
+cuDNN files on a dedicated installation folder. To do it, create a new folder in `~/`
+and run the commands on it.
 
 ### Finish installation
 
-You can verify the cuda version in your computer with the command above. You should have a `cuda` folder and other `cuda-x` folders including at least `cuda-12.2`.
+You can verify the cuda version in your computer with the command above. You should have a `cuda` folder and other `cuda-x` folders including at least `cuda-12.1`.
 
-CUDA is globally a set of libraries that are generally installed as dependencies of other packages. It is possible to install some packages that are depend to CUDA and after removing it, apt could consider that CUDA are no longer necessary in your computer. And it will propose you to remove it with `apt autoremove`. But as you will use it for ML packages, you don't want to uninstall it. Therefore, you must precise to apt that you installed CUDA manually and prevent it to suggest you to remove it:
+CUDA is globally a set of libraries that are generally installed as dependencies of
+other packages. It is possible to install some packages that are depend to CUDA and
+after removing it, apt could consider that CUDA are no longer necessary in your computer.
+And it will propose you to remove it with `apt autoremove`. But as you will use it for
+ML packages, you don't want to uninstall it. Therefore, you must precise to apt that you
+installed CUDA manually and prevent it to suggest you to remove it:
 
 ```script
 sudo apt-mark manual cuda-\*
 ```
 
-### cuDNN Installation
+### cuDNN Installation (optional)
 
-Now you will install cuDNN that contains libraries written in C used by Tensorflow and Jax. The link of the official tutorial is <https://docs.nvidia.com/deeplearning/cudnn/install-guide/index.html>. Once again, I summarize the installation below.
+This section is optional. Some libraries like old versions of Tensorflow and some Jax installation
+procedures require cuDNN libraries. If you don't need it, you can skip this section.
+
+Here you can find the quick tutorial to install cuDNN compatible with CUDA 12.x
+(you can adapt to you needs). The link of the official tutorial is <https://docs.nvidia.com/deeplearning/cudnn/install-guide/index.html>. Once again, I summarize the installation below.
 
 First go to the cuDNN page: <https://developer.nvidia.com/cudnn>. You must register an account to get access to the page so register yourself if it's the first time you try to download cuDNN. There is also a quick survey to complete or to skip. Otherwise just login in your account.
 
@@ -286,7 +309,7 @@ Create a temporary environment with tensorflow, pytorch and Jax on it:
 ```script
 mktmpenv -p python3.11
 pip install -U pip
-pip install tensorflow
+pip install tensorflow[and-cuda]
 pip install torch
 pip install --upgrade "jax[cuda12_pip]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
 ```
